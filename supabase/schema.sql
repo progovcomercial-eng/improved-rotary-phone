@@ -22,6 +22,21 @@ create table public.user_roles (
   primary key (user_id, role)
 );
 
+-- Cria perfil básico automaticamente após cadastro pelo Supabase Auth.
+create or replace function public.handle_new_user()
+returns trigger language plpgsql security definer set search_path = ''
+as $
+begin
+  insert into public.profiles (id, full_name)
+  values (new.id, coalesce(new.raw_user_meta_data ->> 'full_name', ''));
+  return new;
+end;
+$;
+
+create trigger on_auth_user_created
+  after insert on auth.users
+  for each row execute procedure public.handle_new_user();
+
 create or replace function public.has_role(required_roles public.app_role[])
 returns boolean language sql stable security definer set search_path = ''
 as $$
@@ -166,16 +181,14 @@ with check (public.has_role(array['owner','admin','manager','finance']::public.a
 
 create policy "orders_read_owner_or_staff" on public.orders for select to authenticated
 using (user_id = (select auth.uid()) or public.has_role(array['owner','admin','manager','sales','finance']::public.app_role[]));
-create policy "orders_customer_create" on public.orders for insert to authenticated
-with check (user_id = (select auth.uid()));
+-- Pedidos devem ser criados por Edge Function de checkout, que valida estoque e recalcula valores.
 create policy "orders_staff_manage" on public.orders for update to authenticated
 using (public.has_role(array['owner','admin','manager','sales','finance']::public.app_role[]))
 with check (public.has_role(array['owner','admin','manager','sales','finance']::public.app_role[]));
 
 create policy "order_items_read_through_order" on public.order_items for select to authenticated
 using (exists(select 1 from public.orders o where o.id=order_id and (o.user_id=(select auth.uid()) or public.has_role(array['owner','admin','manager','sales','finance']::public.app_role[]))));
-create policy "order_items_customer_create" on public.order_items for insert to authenticated
-with check (exists(select 1 from public.orders o where o.id=order_id and o.user_id=(select auth.uid()) and o.status='pending'));
+-- Itens de pedido também são gravados somente pela Edge Function de checkout.
 
 create policy "payments_read_owner_or_staff" on public.payments for select to authenticated
 using (user_id=(select auth.uid()) or public.has_role(array['owner','admin','finance']::public.app_role[]));

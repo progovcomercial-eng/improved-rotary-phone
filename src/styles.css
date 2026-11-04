@@ -54,3 +54,16 @@
 .club-price-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .club-admin-thumb{width:70px;height:60px;object-fit:cover;border-radius:8px;display:block;margin-bottom:8px}
 @media(max-width:650px){.club-price-fields{grid-template-columns:1fr}.club-offer-body{padding:16px}}
+
+/* Acesso administrativo protegido */
+.admin-auth-overlay{z-index:10000}
+.admin-auth-modal{position:relative;width:min(100% - 32px,440px);max-height:calc(100vh - 32px);overflow:auto}
+.admin-auth-icon{width:56px;height:56px;border-radius:18px;background:#f8e9ed;color:#a86b12;display:grid;place-items:center;margin:18px 0}
+.admin-auth-modal h2{font:600 26px 'Playfair Display';color:#392b20;margin:0 0 8px}
+.admin-auth-modal>p{font-size:13px;line-height:1.6;color:#817367}
+.admin-auth-modal label{display:block;font-size:12px;font-weight:700;color:#594534;margin:14px 0 6px}
+.admin-auth-modal input{display:block;width:100%;box-sizing:border-box;border:1px solid #e8ded2;border-radius:10px;padding:13px;background:#fffdfb;font:14px 'DM Sans';color:#30251e}
+.admin-auth-modal .goldbtn{margin:18px 0 12px}
+.admin-auth-modal .goldbtn:disabled{opacity:.5;cursor:not-allowed}
+.admin-auth-modal small{display:block;color:#938477;font-size:10px;line-height:1.55}
+.admin-auth-error{padding:10px 12px;border-radius:9px;background:#fff0ed;color:#9b3f31;font-size:12px}

@@ -67,3 +67,15 @@
 .admin-auth-modal .goldbtn:disabled{opacity:.5;cursor:not-allowed}
 .admin-auth-modal small{display:block;color:#938477;font-size:10px;line-height:1.55}
 .admin-auth-error{padding:10px 12px;border-radius:9px;background:#fff0ed;color:#9b3f31;font-size:12px}
+
+/* Assistente virtual ALE CLUBE */
+.assistant-fab{position:fixed;right:18px;bottom:88px;z-index:40;display:flex;align-items:center;gap:9px;border:0;border-radius:999px;padding:13px 18px;background:linear-gradient(135deg,#8b2be2,#e91678);color:#fff;font-weight:800;box-shadow:0 8px 28px #8b2be255;cursor:pointer}
+.assistant-fab svg{width:22px;height:22px}
+.assistant-panel{position:fixed;right:18px;bottom:145px;z-index:50;width:min(360px,calc(100vw - 28px));height:440px;max-height:calc(100dvh - 180px);display:flex;flex-direction:column;overflow:hidden;border-radius:20px;background:#fff;box-shadow:0 16px 50px #32143b40;border:1px solid #f1d7e6}
+.assistant-panel>header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;background:linear-gradient(120deg,#7928ca,#e91678);color:#fff}
+.assistant-panel>header>div{display:flex;align-items:center;gap:10px}.assistant-panel>header span{display:flex;flex-direction:column}.assistant-panel>header small{font-size:11px;opacity:.85}.assistant-panel>header button{border:0;background:transparent;color:#fff;cursor:pointer}
+.assistant-chat{flex:1;overflow:auto;padding:15px;background:#fff8fc;display:flex;flex-direction:column;gap:9px}
+.assistant-bubble{align-self:flex-start;max-width:88%;padding:11px 13px;border-radius:14px 14px 14px 4px;background:#f5e8fa;color:#43264b;font-size:13px;line-height:1.45;margin:0;white-space:pre-wrap}
+.assistant-bubble.from-user{align-self:flex-end;background:#e91678;color:white;border-radius:14px 14px 4px 14px}
+.assistant-panel form{display:flex;gap:8px;padding:12px;border-top:1px solid #f1d7e6}.assistant-panel form input{flex:1;min-width:0;border:1px solid #ead6e2;border-radius:999px;padding:11px 13px}.assistant-panel form button{border:0;border-radius:50%;width:42px;height:42px;background:#e91678;color:white;display:grid;place-items:center}
+.assistant-toggle{display:flex;align-items:center;gap:10px;margin-bottom:18px}.assistant-toggle input{width:18px;height:18px;accent-color:#e91678}

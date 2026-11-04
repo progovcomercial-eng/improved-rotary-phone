@@ -5,6 +5,8 @@ import'./styles.css';
 const WHATS='https://wa.me/5511997450293';
 function App(){
  const[tab,setTab]=useState('Início'),[admin,setAdmin]=useState(false),[menu,setMenu]=useState(false),[modal,setModal]=useState(''),[installPrompt,setInstallPrompt]=useState(null),[installed,setInstalled]=useState(false);
+ const historyStack=useRef(['Início']);
+ useEffect(()=>{window.history.replaceState({aleTab:'Início'},'',window.location.pathname+window.location.search);window.history.pushState({aleTab:'Início',aleRoot:true},'',window.location.pathname+window.location.search+'#ale-clube');const onPop=()=>{if(historyStack.current.length>1){historyStack.current.pop();setTab(historyStack.current[historyStack.current.length-1]||'Início');}else{setTab('Início');window.history.pushState({aleTab:'Início',aleRoot:true},'',window.location.pathname+window.location.search+'#ale-clube');}};window.addEventListener('popstate',onPop);return()=>window.removeEventListener('popstate',onPop);},[]);
  useEffect(()=>{const handler=e=>{e.preventDefault();setInstallPrompt(e)};window.addEventListener('beforeinstallprompt',handler);window.addEventListener('appinstalled',()=>setInstalled(true));return()=>window.removeEventListener('beforeinstallprompt',handler)},[]);
  const nav=[['Início',Home],['Clube do Alê',Gift],['Agendamento',CalendarDays],['Vitrine do Alê',ShoppingBag],['Perfil',User]];
  const adminNav=[['Visão geral',LayoutDashboard],['Clientes',Users],['Associados',ShieldCheck],['Planos',Tag],['Produtos',Package],['Pedidos',ShoppingBag],['Pagamentos',Wallet],['Agendamentos',CalendarDays],['Relatórios',ChartNoAxesCombined],['Configurações',Settings]];

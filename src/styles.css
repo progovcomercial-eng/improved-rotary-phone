@@ -38,3 +38,19 @@
 .treatment-actions{display:flex;gap:6px;flex-wrap:wrap}
 .treatment-actions button{border:1px solid #eadfD2;background:#fffaf5;color:#72501e;border-radius:18px;padding:7px 10px;font-size:11px;cursor:pointer}
 @media(max-width:650px){.treatmentgrid{grid-template-columns:1fr}.treatmentform{padding:16px}.admin-treatment{align-items:flex-start;flex-direction:column}.treatment-actions{width:100%}.treatment-actions button{flex:1}}
+
+/* Clube do Alê — ofertas e campanhas */
+.club-offers{display:grid;gap:18px;margin:26px 0}
+.club-offer{overflow:hidden;border:1px solid #eadfD2;border-radius:18px;background:#fff;box-shadow:0 8px 24px rgba(70,48,22,.06)}
+.club-offer-image,.club-offer-video{display:block;width:100%;max-height:310px;object-fit:cover;background:#f6eee6}
+.club-offer-body{padding:20px}
+.offer-tag{display:inline-flex;padding:6px 11px;border-radius:18px;background:#f8e8ed;color:#a45d6c;font-size:10px;font-weight:800;letter-spacing:.08em}
+.club-offer-body h2{font:600 24px 'Playfair Display';margin:12px 0 7px;color:#392b20}
+.club-offer-body p{font-size:13px;line-height:1.65;color:#817367}
+.offer-prices{display:flex;flex-direction:column;gap:5px;margin:16px 0}
+.offer-normal{font-size:12px;color:#96897c;text-decoration:line-through}
+.offer-prices b{font-size:19px;color:#9b681d}
+.club-join{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px 20px;border:0;border-radius:28px;background:#a86b12;color:white;font-weight:700;cursor:pointer}
+.club-price-fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.club-admin-thumb{width:70px;height:60px;object-fit:cover;border-radius:8px;display:block;margin-bottom:8px}
+@media(max-width:650px){.club-price-fields{grid-template-columns:1fr}.club-offer-body{padding:16px}}

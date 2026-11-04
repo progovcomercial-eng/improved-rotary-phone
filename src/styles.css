@@ -10,3 +10,31 @@
 .tile{transition:transform .18s ease,box-shadow .18s ease}
 .tile:active{transform:scale(.985)}
 @media(max-width:650px){.tiles{grid-template-columns:1fr}.backbtn{min-width:0;padding:7px 9px}.backbtn span{display:inline}}
+
+/* Gestão de tratamentos da Clínica Estética */
+.treatmentgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:28px 0}
+.treatmentcard{border:1px solid #eee1d4;border-radius:17px;padding:20px;background:#fff}
+.treatmentmark{width:42px;height:42px;border-radius:14px;background:#fae9ed;color:#b77b25;display:grid;place-items:center}
+.treatmentcard h3{font:600 20px 'Playfair Display';margin:14px 0 7px}
+.treatmentcard p{font-size:12px;color:#817367;line-height:1.6}
+.treatmentprice{display:block;color:#a36b16;font-size:13px;margin:12px 0}
+.treatmentcard .goldbtn{margin-top:10px;padding:11px 16px;font-size:12px}
+.treatmentform{background:#fff;border:1px solid #eee1d4;border-radius:16px;padding:22px;margin:25px 0}
+.treatmentform h2{font:600 22px 'Playfair Display';margin:0 0 16px}
+.treatmentform label{display:block;font-size:12px;font-weight:700;margin:13px 0 6px;color:#594534}
+.treatmentform input,.treatmentform textarea{width:100%;border:1px solid #e8ded2;border-radius:9px;padding:12px;font:14px 'DM Sans';background:#fffdfb;color:#30251e}
+.treatmentform textarea{resize:vertical}
+.treatmentform small{display:block;color:#938477;font-size:11px;margin-top:12px}
+.formactions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.cancelbtn{border:1px solid #e7d5b7;background:#fff;border-radius:25px;padding:13px 18px;color:#72501e;cursor:pointer}
+.goldbtn:disabled{opacity:.45;cursor:not-allowed}
+.admin-treatment-list{display:grid;gap:10px}
+.admin-treatment{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:16px;border:1px solid #eee3d8;background:#fff;border-radius:13px}
+.admin-treatment b{font:600 17px 'Playfair Display'}
+.admin-treatment p{font-size:12px;color:#817367;margin:6px 0}
+.admin-treatment small{display:block;color:#a36b16;font-size:11px;margin-bottom:8px}
+.status-on,.status-off{display:inline-block;padding:5px 9px;border-radius:15px;font-size:10px;background:#e7f2e8;color:#287044}
+.status-off{background:#f4e9e6;color:#9a4d3c}
+.treatment-actions{display:flex;gap:6px;flex-wrap:wrap}
+.treatment-actions button{border:1px solid #eadfD2;background:#fffaf5;color:#72501e;border-radius:18px;padding:7px 10px;font-size:11px;cursor:pointer}
+@media(max-width:650px){.treatmentgrid{grid-template-columns:1fr}.treatmentform{padding:16px}.admin-treatment{align-items:flex-start;flex-direction:column}.treatment-actions{width:100%}.treatment-actions button{flex:1}}

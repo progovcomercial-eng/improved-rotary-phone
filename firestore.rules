@@ -13,7 +13,7 @@ service cloud.firestore {
         get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role == 'gerente');
     }
     function employeeRole(role) {
-      return role in ['supervisor','recepcionista','atendente','vendedor','funcionario'];
+      return role in ['supervisor','secretaria','recepcionista','atendente','vendedor','funcionario'];
     }
     match /users/{uid} {
       allow create: if signedIn() && request.auth.uid == uid
@@ -38,12 +38,15 @@ service cloud.firestore {
     match /appointments/{id} {
       allow create: if request.resource.data.keys().hasOnly(['name','phone','service','date','time','status','createdAt','userId'])
         && request.resource.data.name is string && request.resource.data.phone is string
-        && request.resource.data.date is string && request.resource.data.time is string;
+        && request.resource.data.service is string && request.resource.data.date is string
+        && request.resource.data.time is string && request.resource.data.status == 'solicitado'
+        && (request.resource.data.userId == null || request.resource.data.userId == request.auth.uid);
       allow read, update, delete: if staff();
     }
     match /leads/{id} {
       allow create: if request.resource.data.keys().hasOnly(['name','contact','request','status','createdAt'])
-        && request.resource.data.name is string && request.resource.data.contact is string;
+        && request.resource.data.name is string && request.resource.data.contact is string
+        && request.resource.data.status == 'novo';
       allow read, update, delete: if staff();
     }
     match /{collectionName}/{documentId} {

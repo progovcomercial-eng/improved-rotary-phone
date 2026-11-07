@@ -6,21 +6,39 @@
 3. Copie `.env.example` para `.env.local` e preencha as credenciais do app Web do Firebase.
 4. Execute `npm run dev`.
 
-## Firebase
-Ative Authentication > Email/Password e crie um banco Firestore em modo produção. Publique as regras com `firebase deploy --only firestore:rules`.
+## Preparar o Firebase
+1. Crie/abra o projeto no Firebase Console.
+2. Em Authentication, habilite Email/Password.
+3. Crie o banco Firestore.
+4. Ative o Firebase Storage.
+5. Crie o app Web e preencha as variáveis de `.env.local`.
+6. Crie a conta proprietária com o e-mail `progovcomercial@gmail.com` em Authentication.
+7. Publique as regras: `firebase deploy --only firestore:rules,storage`.
 
-A conta proprietária é reconhecida pelo e-mail `progovcomercial@gmail.com`. Crie primeiro essa conta em Firebase Authentication. Não coloque senha ou chave privada no código. As credenciais do Firebase Web são variáveis públicas de configuração; as permissões reais são aplicadas pelas regras do Firestore.
+A conta proprietária é reconhecida pelo e-mail acima. Não coloque senhas nem chaves privadas no código. As credenciais do Firebase Web são variáveis públicas de configuração; a proteção dos dados é aplicada pelas regras do Firestore e Storage.
 
-## Publicação no Firebase Hosting
-Instale a CLI: `npm install -g firebase-tools`; faça `firebase login`; execute `firebase use --add` para associar o projeto; depois `npm run build` e `firebase deploy`.
+## Publicar no Firebase Hosting
+Instale a CLI: `npm install -g firebase-tools`; faça `firebase login`; execute `firebase use --add` para associar o projeto; depois execute `npm run build` e `firebase deploy`.
 
-## Funções desta etapa
-- Login e cadastro por e-mail/senha com Firebase Authentication.
-- Reconhecimento da conta proprietária e estrutura inicial de funções de equipe.
-- Painel com clientes, associados, planos, tratamentos, parceiros, produtos/vitrine, promoções, agendamentos, pedidos, funcionários e configurações.
-- Cadastro, edição e exclusão dos registros suportados pelo formulário genérico, com Firestore.
-- Conteúdo publicado sincronizado para visitantes.
-- Formulário de interesse armazenado em leads.
-- Regras iniciais de acesso e estrutura PWA para Firebase Hosting.
+## Recursos integrados nesta branch
+- Login e cadastro por e-mail/senha via Firebase Authentication.
+- Firestore para cadastros e sincronização de conteúdo publicado.
+- Painel administrativo com clientes, associados, planos, tratamentos, parceiros, produtos/vitrine, promoções, agendamentos, pedidos, funcionários e configurações.
+- Configurações de identidade, cores, logo, publicidade, vídeo, parcerias, horários, links e Alexandra IA.
+- Solicitações de agendamento; o horário fica pendente até confirmação da equipe.
+- Tratamentos com imagem, vídeo e link, limitados a 20 registros.
+- Produtos/vitrine com imagem, vídeo e link externo.
+- Upload de imagens e vídeos para Firebase Storage, com regras de acesso.
+- Até cinco cadastros de funcionários; criação de gerente restrita à proprietária.
+- PWA e configuração para Firebase Hosting.
+- Workflow do GitHub Actions para executar `npm run build`.
 
-Pagamentos, agenda externa, upload de imagens/vídeos, convites e criação segura de contas de funcionários, e IA conversacional ainda exigem integrações próprias. A interface do módulo não significa que esses serviços externos já estejam conectados.
+## Ainda depende de configuração/serviço externo
+- Preencher as variáveis Firebase, ativar serviços e testar as regras no projeto real.
+- Publicar no Firebase Hosting.
+- Pagamentos e integrações OAuth/API com Shopee, Mercado Livre, Amazon, Kiwify, Hotmart e QRFy.
+- Respostas generativas da Alexandra IA: a tela e as instruções são configuráveis, mas a IA real precisa de um backend seguro e provedor conectado.
+- Convites automáticos de funcionários pelo Firebase Authentication.
+- Confirmação automática de agenda, notificações e pontuação XP por regras de negócio no backend.
+
+A branch de integração deve ser validada pelo build e por testes no Firebase antes de ser mesclada em `main`.

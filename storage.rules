@@ -1,0 +1,18 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    function signedIn() { return request.auth != null; }
+    function owner() { return signedIn() && request.auth.token.email == 'progovcomercial@gmail.com'; }
+    function manager() {
+      return owner() || (signedIn() &&
+        firestore.exists(/databases/(default)/documents/staff/$(request.auth.uid)) &&
+        firestore.get(/databases/(default)/documents/staff/$(request.auth.uid)).data.role == 'gerente' &&
+        firestore.get(/databases/(default)/documents/staff/$(request.auth.uid)).data.active == true);
+    }
+    match /{folder}/{fileName} {
+      allow read: if true;
+      allow write: if manager() && request.resource.size < 50 * 1024 * 1024 &&
+        request.resource.contentType.matches('image/.*|video/.*');
+    }
+  }
+}

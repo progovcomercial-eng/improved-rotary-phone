@@ -1,6 +1,6 @@
 import React,{useEffect,useMemo,useState}from'react';
 import{createRoot}from'react-dom/client';
-import{Home,Gift,CalendarDays,ShoppingBag,User,Menu,X,ChevronRight,Sparkles,Heart,Star,MessageCircle,ShieldCheck,ArrowRight,LayoutDashboard,Users,Wallet,Package,Settings,ChartNoAxesCombined,LockKeyhole,LogOut,Plus,Download,Tag,Clock,ClipboardList,Trash2,Edit3,Save,Stethoscope,Image,Video,Palette,ToggleLeft,RefreshCw,Mail}from'lucide-react';
+import{Home,Gift,CalendarDays,ShoppingBag,User,Menu,X,ChevronRight,Sparkles,Heart,Star,MessageCircle,ShieldCheck,ArrowRight,LayoutDashboard,Users,Wallet,Package,Settings,ChartNoAxesCombined,LockKeyhole,LogOut,Plus,Download,Tag,Clock,ClipboardList,Trash2,Edit3,Save,Stethoscope,Image,Video,Palette,ToggleLeft,RefreshCw,Mail,ExternalLink}from'lucide-react';
 import{initializeApp}from'firebase/app';
 import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut}from'firebase/auth';
 import{getFirestore,collection,doc,setDoc,addDoc,deleteDoc,onSnapshot,query,orderBy,where,serverTimestamp}from'firebase/firestore';

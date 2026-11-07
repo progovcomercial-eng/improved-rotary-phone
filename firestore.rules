@@ -12,14 +12,24 @@ service cloud.firestore {
       return owner() || (staff() &&
         get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role == 'gerente');
     }
+    function employeeRole(role) {
+      return role in ['supervisor','recepcionista','atendente','vendedor','funcionario'];
+    }
     match /users/{uid} {
-      allow create: if signedIn() && request.auth.uid == uid;
-      allow read, update: if (signedIn() && request.auth.uid == uid) || owner();
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name','email','points','createdAt'])
+        && request.resource.data.points == 0;
+      allow read: if (signedIn() && request.auth.uid == uid) || owner();
+      allow update: if owner() || (signedIn() && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name']));
       allow delete: if owner();
     }
     match /staff/{uid} {
       allow read: if signedIn() && (request.auth.uid == uid || manager());
-      allow create, update, delete: if manager();
+      allow create: if owner() || (manager() && employeeRole(request.resource.data.role));
+      allow update: if owner() || (manager() && resource.data.role != 'gerente'
+        && employeeRole(request.resource.data.role));
+      allow delete: if owner() || (manager() && resource.data.role != 'gerente');
     }
     match /settings/{id} {
       allow read: if id == 'app';

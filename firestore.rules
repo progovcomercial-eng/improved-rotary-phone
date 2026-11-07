@@ -48,7 +48,7 @@ service cloud.firestore {
     }
     match /{collectionName}/{documentId} {
       allow read: if collectionName in ['plans','treatments','partners','products','promotions'] && resource.data.active == true;
-      allow read: if staff();
+      allow read: if staff() && collectionName in ['customers','members','plans','treatments','partners','products','promotions','orders'];
       allow create, update, delete: if manager() &&
         collectionName in ['customers','members','plans','treatments','partners','products','promotions','orders'];
     }

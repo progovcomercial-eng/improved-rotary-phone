@@ -3,7 +3,7 @@ import{createRoot}from'react-dom/client';
 import{Home,Gift,CalendarDays,ShoppingBag,User,Menu,X,ChevronRight,Sparkles,Heart,Star,MessageCircle,ShieldCheck,ArrowRight,LayoutDashboard,Users,Wallet,Package,Settings,ChartNoAxesCombined,LockKeyhole,LogOut,Plus,Download,Tag,Clock,ClipboardList,Trash2,Edit3,Save,Stethoscope,Image,Video,Palette,ToggleLeft,RefreshCw,Mail}from'lucide-react';
 import{initializeApp}from'firebase/app';
 import{getAuth,onAuthStateChanged,signInWithEmailAndPassword,createUserWithEmailAndPassword,signOut}from'firebase/auth';
-import{getFirestore,collection,doc,setDoc,addDoc,deleteDoc,onSnapshot,query,orderBy,serverTimestamp}from'firebase/firestore';
+import{getFirestore,collection,doc,setDoc,addDoc,deleteDoc,onSnapshot,query,orderBy,where,serverTimestamp}from'firebase/firestore';
 import'./styles.css';
 
 const OWNER_EMAIL='progovcomercial@gmail.com';
@@ -25,6 +25,7 @@ function App(){
  const[tab,setTab]=useState('Início'),[admin,setAdmin]=useState(false),[menu,setMenu]=useState(false),[modal,setModal]=useState(''),[user,setUser]=useState(null),[role,setRole]=useState('cliente'),[authMode,setAuthMode]=useState('login'),[email,setEmail]=useState(''),[password,setPassword]=useState(''),[fullName,setFullName]=useState(''),[authError,setAuthError]=useState(''),[busy,setBusy]=useState(false),[installPrompt,setInstallPrompt]=useState(null),[installed,setInstalled]=useState(false),[records,setRecords]=useState({}),[form,setForm]=useState(blank),[editing,setEditing]=useState(null),[message,setMessage]=useState('');
  useEffect(()=>{if(!auth)return;return onAuthStateChanged(auth,async u=>{setUser(u);if(!u){setRole('cliente');return}if(u.email?.toLowerCase()===OWNER_EMAIL){setRole('dona');return}try{const snap=await import('firebase/firestore').then(m=>m.getDoc(m.doc(db,'staff',u.uid)));setRole(snap.exists()&&snap.data().active?snap.data().role||'funcionario':'cliente')}catch{setRole('cliente')}})},[]);
  useEffect(()=>{const h=e=>{e.preventDefault();setInstallPrompt(e)};window.addEventListener('beforeinstallprompt',h);return()=>window.removeEventListener('beforeinstallprompt',h)},[]);
+ useEffect(()=>{if(!db)return;const cols=['plans','treatments','partners','products','promotions'];const unsubs=cols.map(col=>onSnapshot(query(collection(db,col),where('active','==',true)),snap=>setRecords(p=>({...p,[col]:snap.docs.map(d=>({id:d.id,...d.data()}))})),()=>setRecords(p=>({...p,[col]:[]}))));return()=>unsubs.forEach(u=>u())},[]);
  useEffect(()=>{if(!db||!admin||!['dona','gerente','funcionario'].includes(role))return;const unsubs=modules.map(([,col])=>onSnapshot(query(collection(db,col),orderBy('createdAt','desc')),(s)=>setRecords(p=>({...p,[col]:s.docs.map(d=>({id:d.id,...d.data()}))})),()=>setRecords(p=>({...p,[col]:[]}))));return()=>unsubs.forEach(u=>u())},[admin,role]);
  const nav=[['Início',Home],['Benefícios',Gift],['Agendar',CalendarDays],['Loja',ShoppingBag],['Minha conta',User]];
  const adminNav=[['Visão geral',LayoutDashboard],...modules.map(([n,,I])=>[n,I])];

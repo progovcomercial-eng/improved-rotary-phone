@@ -19,7 +19,7 @@ service cloud.firestore {
     }
     match /staff/{uid} {
       allow read: if signedIn() && (request.auth.uid == uid || manager());
-      allow create, update, delete: if owner();
+      allow create, update, delete: if manager();
     }
     match /settings/{id} {
       allow read: if id == 'app';

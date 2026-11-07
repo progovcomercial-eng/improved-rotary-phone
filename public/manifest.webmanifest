@@ -1,0 +1,16 @@
+{
+  "name": "ALE CLUBE",
+  "short_name": "ALE CLUBE",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fffaf5",
+  "theme_color": "#a86b12",
+  "icons": [
+    {
+      "src": "/logo-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

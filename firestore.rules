@@ -1,0 +1,59 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() { return request.auth != null; }
+    function owner() { return signedIn() && request.auth.token.email == 'progovcomercial@gmail.com'; }
+    function staff() {
+      return signedIn() && (owner() ||
+        (exists(/databases/$(database)/documents/staff/$(request.auth.uid)) &&
+         get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.active == true));
+    }
+    function manager() {
+      return owner() || (staff() &&
+        get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role == 'gerente');
+    }
+    function employeeRole(role) {
+      return role in ['supervisor','secretaria','recepcionista','atendente','vendedor','funcionario'];
+    }
+    match /users/{uid} {
+      allow create: if signedIn() && request.auth.uid == uid
+        && request.resource.data.keys().hasOnly(['name','email','points','createdAt'])
+        && request.resource.data.points == 0;
+      allow read: if (signedIn() && request.auth.uid == uid) || owner();
+      allow update: if owner() || (signedIn() && request.auth.uid == uid
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['name']));
+      allow delete: if owner();
+    }
+    match /staff/{uid} {
+      allow read: if signedIn() && (request.auth.uid == uid || manager());
+      allow create: if owner() || (manager() && employeeRole(request.resource.data.role));
+      allow update: if owner() || (manager() && resource.data.role != 'gerente'
+        && employeeRole(request.resource.data.role));
+      allow delete: if owner() || (manager() && resource.data.role != 'gerente');
+    }
+    match /settings/{id} {
+      allow read: if id == 'app';
+      allow create, update, delete: if manager();
+    }
+    match /appointments/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['name','phone','service','date','time','status','createdAt','userId'])
+        && request.resource.data.name is string && request.resource.data.phone is string
+        && request.resource.data.service is string && request.resource.data.date is string
+        && request.resource.data.time is string && request.resource.data.status == 'solicitado'
+        && (request.resource.data.userId == null || request.resource.data.userId == request.auth.uid);
+      allow read, update, delete: if staff();
+    }
+    match /leads/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['name','contact','request','status','createdAt'])
+        && request.resource.data.name is string && request.resource.data.contact is string
+        && request.resource.data.status == 'novo';
+      allow read, update, delete: if staff();
+    }
+    match /{collectionName}/{documentId} {
+      allow read: if collectionName in ['plans','treatments','partners','products','promotions'] && resource.data.active == true;
+      allow read: if staff() && collectionName in ['customers','members','plans','treatments','partners','products','promotions','orders'];
+      allow create, update, delete: if manager() &&
+        collectionName in ['customers','members','plans','treatments','partners','products','promotions','orders'];
+    }
+  }
+}

@@ -4,33 +4,43 @@ service cloud.firestore {
     function signedIn() { return request.auth != null; }
     function owner() { return signedIn() && request.auth.token.email == 'progovcomercial@gmail.com'; }
     function staff() {
-      return signedIn() && (
-        owner() ||
+      return signedIn() && (owner() ||
         (exists(/databases/$(database)/documents/staff/$(request.auth.uid)) &&
-         get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.active == true)
-      );
+         get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.active == true));
     }
     function manager() {
-      return owner() ||
-        (staff() && get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role in ['gerente']);
+      return owner() || (staff() &&
+        get(/databases/$(database)/documents/staff/$(request.auth.uid)).data.role == 'gerente');
     }
     match /users/{uid} {
       allow create: if signedIn() && request.auth.uid == uid;
-      allow read, update: if signedIn() && request.auth.uid == uid || owner();
+      allow read, update: if (signedIn() && request.auth.uid == uid) || owner();
       allow delete: if owner();
     }
     match /staff/{uid} {
-      allow read: if signedIn() && (request.auth.uid == uid || owner());
+      allow read: if signedIn() && (request.auth.uid == uid || manager());
       allow create, update, delete: if owner();
+    }
+    match /settings/{id} {
+      allow read: if id == 'app';
+      allow create, update, delete: if manager();
+    }
+    match /appointments/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['name','phone','service','date','time','status','createdAt','userId'])
+        && request.resource.data.name is string && request.resource.data.phone is string
+        && request.resource.data.date is string && request.resource.data.time is string;
+      allow read, update, delete: if staff();
+    }
+    match /leads/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['name','contact','request','status','createdAt'])
+        && request.resource.data.name is string && request.resource.data.contact is string;
+      allow read, update, delete: if staff();
     }
     match /{collectionName}/{documentId} {
       allow read: if collectionName in ['plans','treatments','partners','products','promotions'] && resource.data.active == true;
       allow read: if staff();
-      allow create, update, delete: if manager() && collectionName in ['customers','members','plans','treatments','partners','products','promotions','appointments','orders','settings','staff'];
-    }
-    match /leads/{leadId} {
-      allow create: if request.resource.data.keys().hasOnly(['name','contact','request','status','createdAt']);
-      allow read, update, delete: if staff();
+      allow create, update, delete: if manager() &&
+        collectionName in ['customers','members','plans','treatments','partners','products','promotions','orders'];
     }
   }
 }

@@ -34,7 +34,7 @@ function App(){
  useEffect(()=>{if(!db||!admin||!['dona','gerente'].includes(role))return;return onSnapshot(collection(db,'staff'),snap=>setStaff(snap.docs.map(d=>({id:d.id,...d.data()}))))},[admin,role]);
  useEffect(()=>{if(!db||!admin||!isStaff)return;const unsubs=modules.filter(([,col])=>canManage||!['settings','staff'].includes(col)).map(([,col])=>onSnapshot(query(collection(db,col),orderBy('createdAt','desc')),(s)=>setRecords(p=>({...p,[col]:s.docs.map(d=>({id:d.id,...d.data()}))})),()=>setRecords(p=>({...p,[col]:[]}))));return()=>unsubs.forEach(u=>u())},[admin,role]);
  const nav=[['Início',Home],['Benefícios',Gift],['Tratamentos',Stethoscope],['Nossa história',Heart],['Agendar',CalendarDays],['Planos',Tag],['Pontos XP',Star],['Vitrine ALE',ShoppingBag],['Loja',ShoppingBag],['Minha conta',User]];
- const isStaff=['dona','gerente','supervisor','recepcionista','atendente','vendedor','funcionario'].includes(role);
+ const isStaff=['dona','gerente','supervisor','secretaria','recepcionista','atendente','vendedor','funcionario'].includes(role);
  const canManage=role==='dona'||role==='gerente';
  const adminNav=[['Visão geral',LayoutDashboard],...modules.filter(([n])=>canManage||!['Configurações','Funcionários'].includes(n)).map(([n,,I])=>[n,I])];
  const go=t=>{setTab(t);setMenu(false);if(t==='Minha conta'&&!user)setModal('Acesse sua conta')};
